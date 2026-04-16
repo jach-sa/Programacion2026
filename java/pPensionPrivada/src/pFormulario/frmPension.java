@@ -1,0 +1,482 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package pFormulario;
+
+import javax.swing.*;
+import java.awt.event.*;
+import javax.swing.JOptionPane;
+import java.sql.*;
+import java.awt.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import javax.swing.table.DefaultTableModel;
+/**
+ *
+ * @author jachr
+ */
+
+
+//metodo para dar estilo a los botones
+public class frmPension extends javax.swing.JFrame {
+private void estilizarBoton(JButton btn, Color fondo, Color texto) {
+    btn.setBackground(fondo);
+    btn.setForeground(texto);
+    btn.setFont(new Font("Consolas", Font.BOLD, 13));
+    btn.setFocusPainted(false);
+    btn.setBorder(BorderFactory.createEmptyBorder(8,15,8,15));
+}
+    /**
+     * Creates new form frmPension
+     */
+   public frmPension() {
+    initComponents();
+    setSize(800, 500); // ancho, alto
+setLocationRelativeTo(null); // centrar la ventana
+    //CONSTRUCOR DE FORMULARIO
+
+    // COLORES
+    Color fondo = new Color(10, 10, 30);
+    Color campo = new Color(20, 20, 50);
+    Color acento = new Color(0, 255, 255);
+    Color morado = new Color(138, 43, 226);
+
+    getContentPane().setBackground(fondo);
+
+    //  TITULO
+    label1.setFont(new Font("Consolas", Font.BOLD, 26));
+    label1.setForeground(acento);
+    label1.setBounds(80, 10, 400, 30);
+
+    // COMBOBOX
+    cboCategoria.setBackground(campo);
+    cboCategoria.setForeground(acento);
+    cboCategoria.setFont(new Font("Consolas", Font.BOLD, 14));
+    cboCategoria.setBorder(BorderFactory.createLineBorder(morado, 2));
+
+    // TEXTFIELD
+    txtPromedio.setBackground(campo);
+    txtPromedio.setForeground(acento);
+    txtPromedio.setCaretColor(acento);
+    txtPromedio.setFont(new Font("Consolas", Font.BOLD, 14));
+    txtPromedio.setBorder(BorderFactory.createLineBorder(morado, 2));
+
+    //  BOTONES (más uniformes)
+    estilizarBoton(btnProcesar, new Color(138, 43, 226), Color.WHITE);
+    estilizarBoton(btnLimpiar, new Color(0, 191, 255), Color.BLACK);
+    estilizarBoton(btnSalir, new Color(255, 50, 120), Color.WHITE);
+btnProcesar.setUI(new RoundedButtonUI(30, Color.CYAN));
+btnLimpiar.setUI(new RoundedButtonUI(30, Color.CYAN));
+btnSalir.setUI(new RoundedButtonUI(30, Color.CYAN));
+    // LISTA
+    lstR.setBackground(new Color(15,15,40));
+    lstR.setForeground(acento);
+    lstR.setFont(new Font("Consolas", Font.PLAIN, 13));
+
+
+    // BORDES VISUALES (tipo tarjeta)
+    ((JComponent)getContentPane()).setBorder(
+        BorderFactory.createLineBorder(morado, 2)
+    );
+    DefaultTableModel modelo = new DefaultTableModel();
+modelo.addColumn("Categoria");
+modelo.addColumn("Promedio");
+modelo.addColumn("Pension");
+modelo.addColumn("Descuento");
+modelo.addColumn("Nueva Pension");
+
+tbldatos.setModel(modelo);
+tbldatos.setBackground(new Color(15,15,40));
+tbldatos.setForeground(Color.CYAN);
+tbldatos.setFont(new Font("Consolas", Font.PLAIN, 12));
+ DefaultTableModel modelo2 = new DefaultTableModel();
+modelo2.addColumn("Categoria");
+modelo2.addColumn("Promedio");
+modelo2.addColumn("Pension");
+modelo2.addColumn("Descuento");
+modelo2.addColumn("Nueva Pension");
+
+
+tblResultados.setModel(modelo2);
+
+}
+
+
+
+//conectar
+
+  private Connection conectar() {
+        Connection cn = null;
+        try {
+            cn = DriverManager.getConnection(
+                  "jdbc:mysql://localhost:3306/escuela", "root", "Olmequitas6857?");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error de conexión: " + e.getMessage());
+        }
+        return cn;
+    }
+  
+  //MOSTRAR TABLA
+  private void mostrarDatosTabla() {
+   DefaultTableModel modelo = (DefaultTableModel) tbldatos.getModel();
+    modelo.setRowCount(0); // limpiar tabla
+
+    Connection cn = conectar();
+
+    if (cn != null) {
+        try {
+            String sql = "SELECT * FROM pensiones";
+            PreparedStatement pst = cn.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                Object[] fila = {
+                    rs.getString("categoria"),
+                    rs.getDouble("promedio"),
+                    rs.getDouble("pension"),
+                    rs.getDouble("descuento"),
+                    rs.getDouble("nueva_pension")
+                };
+//Tabla visualizacion para mysql
+                modelo.addRow(fila);
+            }
+
+            cn.close();
+//cerrar formato
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al mostrar datos: " + e.getMessage());
+        }
+        //catch de error
+    }
+}
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        scrollPane3 = new java.awt.ScrollPane();
+        lstR2 = new java.awt.List();
+        lstR = new java.awt.List();
+        cboCategoria = new javax.swing.JComboBox<>();
+        txtPromedio = new javax.swing.JTextField();
+        btnLimpiar = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
+        btnProcesar = new javax.swing.JButton();
+        label1 = new java.awt.Label();
+        btnMostrar = new java.awt.Button();
+        scrollTabla = new javax.swing.JScrollPane();
+        tbldatos = new javax.swing.JTable();
+        scrollResultados = new javax.swing.JScrollPane();
+        tblResultados = new javax.swing.JTable();
+
+        scrollPane3.setName("resumen pension"); // NOI18N
+        scrollPane3.add(lstR2);
+
+        scrollPane3.getAccessibleContext().setAccessibleParent(lstR);
+
+        lstR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lstRActionPerformed(evt);
+            }
+        });
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
+
+        cboCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "B", "C", "D" }));
+        cboCategoria.setBorder(javax.swing.BorderFactory.createTitledBorder("INGRESE CATEGORIA"));
+        cboCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboCategoriaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cboCategoria);
+        cboCategoria.setBounds(20, 43, 160, 50);
+
+        txtPromedio.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingrese Promedio"));
+        txtPromedio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPromedioActionPerformed(evt);
+            }
+        });
+        getContentPane().add(txtPromedio);
+        txtPromedio.setBounds(20, 100, 160, 50);
+
+        btnLimpiar.setText("LIMPIAR");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLimpiar);
+        btnLimpiar.setBounds(200, 50, 74, 30);
+
+        btnSalir.setText("SALIR");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSalir);
+        btnSalir.setBounds(280, 50, 60, 30);
+
+        btnProcesar.setText("PROCESAR");
+        btnProcesar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProcesarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnProcesar);
+        btnProcesar.setBounds(200, 90, 140, 50);
+
+        label1.setText("PENSION DE ESTUDIANTES");
+        getContentPane().add(label1);
+        label1.setBounds(80, 10, 290, 20);
+
+        btnMostrar.setLabel("button1");
+        btnMostrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMostrarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnMostrar);
+        btnMostrar.setBounds(280, 10, 54, 24);
+
+        tbldatos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrollTabla.setViewportView(tbldatos);
+
+        getContentPane().add(scrollTabla);
+        scrollTabla.setBounds(370, 80, 360, 270);
+
+        tblResultados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrollResultados.setViewportView(tblResultados);
+
+        getContentPane().add(scrollResultados);
+        scrollResultados.setBounds(20, 160, 320, 130);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void cboCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboCategoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboCategoriaActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+    txtPromedio.setText("");
+cboCategoria.setSelectedIndex(0);
+lstR.removeAll(); 
+
+// LIMPIAR TABLA NUEVA
+DefaultTableModel modelo2 = (DefaultTableModel) tblResultados.getModel();
+modelo2.setRowCount(0);
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void txtPromedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPromedioActionPerformed
+      
+    }//GEN-LAST:event_txtPromedioActionPerformed
+
+    private void btnProcesarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarActionPerformed
+ if (txtPromedio.getText().trim().isEmpty()) {
+     //INGRESE LA INFORMACION
+    JOptionPane.showMessageDialog(null, "Ingrese el promedio");
+    return;
+}
+        try {
+        String categoria = cboCategoria.getSelectedItem().toString();
+        double promedio = Double.parseDouble(txtPromedio.getText());
+
+       if (promedio >= 0 && promedio <= 20) {
+    // válido, sigue el programa
+} else {
+    JOptionPane.showMessageDialog(null, "Promedio inválido (0 - 20)");
+    return;
+}
+
+            double pension = 0;
+//CADA CASO DE LOS POSIBLES CATEGORIAS
+          switch (categoria) {
+    case "A": pension = 550; break;
+    case "B": pension = 500; break;
+    case "C": pension = 460; break;
+    case "D": pension = 400; break;
+}
+
+            double descuento = 0;
+//OPERACIONES PARA MOSTRAR LOS RESULTADOS
+            if (promedio >= 18) descuento = 0.15;
+            else if (promedio >= 16) descuento = 0.12;
+            else if (promedio >= 14) descuento = 0.10;
+  double montoDesc = pension * descuento;
+            double nueva = pension - montoDesc;
+            DefaultTableModel modelo2 = (DefaultTableModel) tblResultados.getModel();
+
+modelo2.addRow(new Object[]{
+    categoria,
+    promedio,
+    pension,
+    montoDesc,
+    nueva
+});
+//MUESTRA LOS RESULTADOS
+            lstR.add("La Pension es: $" + pension);
+            lstR.add("El descuento es: $" + montoDesc);
+            lstR.add("La Nueva Pension es: $" + nueva);
+
+            // GUARDAR EN MYSQL
+            Connection cn = conectar();
+
+            if (cn != null) {
+                String sql = "INSERT INTO pensiones(categoria, promedio, pension, descuento, nueva_pension) VALUES (?, ?, ?, ?, ?)";
+PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setString(1, categoria);
+                pst.setDouble(2, promedio);
+                pst.setDouble(3, pension);
+                pst.setDouble(4, montoDesc);
+                pst.setDouble(5, nueva);
+//pOSIBLES CASOS DONDE PUEDAN OCURRIR ERRORES CUADROS PARA AYUDAR AL USUARIO
+                pst.executeUpdate();
+
+                JOptionPane.showMessageDialog(null, "Datos guardados en la base de datos");
+                mostrarDatosTabla();
+                cn.close();
+            }
+ } catch (NumberFormatException e) {
+    JOptionPane.showMessageDialog(null, "Ingrese solo números en el promedio");
+} 
+catch (SQLException e) {
+    JOptionPane.showMessageDialog(null, "Error con la base de datos: " + e.getMessage());
+} 
+catch (HeadlessException e) {
+    JOptionPane.showMessageDialog(null, "Error inesperado: " + e.getMessage());
+}
+      
+    }//GEN-LAST:event_btnProcesarActionPerformed
+
+                
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+int opcion = JOptionPane.showConfirmDialog(
+        this,
+        "¿Seguro que deseas salir?",
+        "Confirmar salida",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE
+    );
+
+    if (opcion == JOptionPane.YES_OPTION) {
+        System.exit(0);
+    }
+  // TODO add your handling code here:
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void lstRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lstRActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lstRActionPerformed
+
+    private void btnMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarActionPerformed
+         mostrarDatosTabla();
+    }//GEN-LAST:event_btnMostrarActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(frmPension.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(frmPension.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(frmPension.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(frmPension.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+         java.awt.EventQueue.invokeLater(() -> {
+            new frmPension().setVisible(true);
+        });
+    }
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLimpiar;
+    private java.awt.Button btnMostrar;
+    private javax.swing.JButton btnProcesar;
+    private javax.swing.JButton btnSalir;
+    private javax.swing.JComboBox<String> cboCategoria;
+    private java.awt.Label label1;
+    private java.awt.List lstR;
+    private java.awt.List lstR2;
+    private java.awt.ScrollPane scrollPane3;
+    private javax.swing.JScrollPane scrollResultados;
+    private javax.swing.JScrollPane scrollTabla;
+    private javax.swing.JTable tblResultados;
+    private javax.swing.JTable tbldatos;
+    private javax.swing.JTextField txtPromedio;
+    // End of variables declaration//GEN-END:variables
+class RoundedButtonUI extends javax.swing.plaf.basic.BasicButtonUI {
+    private int radius;
+    private Color glow;
+
+    public RoundedButtonUI(int radius, Color glow) {
+        this.radius = radius;
+        this.glow = glow; 
+    }
+
+    @Override
+    public void installUI(javax.swing.JComponent c) {
+        super.installUI(c);
+        c.setOpaque(false);
+        c.setBorder(javax.swing.BorderFactory.createEmptyBorder(5,15,5,15));
+    }
+
+    @Override
+    public void paint(java.awt.Graphics g, javax.swing.JComponent c) {
+        javax.swing.AbstractButton b = (javax.swing.AbstractButton) c;
+        java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
+        g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2.setColor(b.getBackground());
+        g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), radius, radius);
+//CONJUNTOS PARA EL ESTILO DEL CUADRO
+        super.paint(g, c);
+    }
+    
+}}

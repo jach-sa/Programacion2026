@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS pensiones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    categoria VARCHAR(2) NOT NULL,
+    promedio DECIMAL(4,2) NOT NULL,
+    pension DECIMAL(10,2) NOT NULL,
+    descuento DECIMAL(10,2) NOT NULL,
+    nueva_pension DECIMAL(10,2) NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
